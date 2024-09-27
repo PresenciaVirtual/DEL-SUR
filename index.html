@@ -11,7 +11,6 @@
             height: 100%;
             margin: 0;
             padding: 0;
-            overflow-x: hidden; /* Eliminar espacio a la derecha */
         }
 
         body {
@@ -59,22 +58,19 @@
             border-radius: 10px;
             background-color: #fff;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            width: 100%; /* Ocupa todo el ancho en móvil */
         }
 
         .carousel {
             display: flex;
-            justify-content: center;
+            justify-content: space-between; /* Los botones estarán a los lados de las imágenes */
             align-items: center;
             margin-bottom: 15px;
-            width: 100%; /* Ajustar el carrusel al 100% */
         }
 
         /* Imágenes del carrusel con tamaño fijo */
         .carousel img {
-            width: 100%; /* Ajusta al 100% del contenedor */
-            max-width: 400px; /* No exceder el ancho máximo */
-            height: auto;
+            width: 400px; /* Ancho fijo */
+            height: 300px; /* Alto fijo */
             object-fit: cover; /* Mantiene la calidad sin deformar la imagen */
             border-radius: 10px;
         }
@@ -85,7 +81,6 @@
             border: none;
             padding: 10px 15px;
             cursor: pointer;
-            margin: 0 10px;
             border-radius: 5px;
             transition: background-color 0.3s;
         }
@@ -144,26 +139,30 @@
         }
 
         /* Estilos para dispositivos móviles */
+        
         @media (max-width: 768px) {
             .carousel {
-                flex-direction: row; /* Los botones se mantienen a los lados */
-                justify-content: space-between; /* Asegura que estén a los lados */
-                width: 100%; /* Ocupa todo el ancho */
+                flex-direction: row; /* Mantiene los botones a los costados de las imágenes */
+                justify-content: space-between;
+                align-items: center;
+            }
+
+            .carousel img {
+                width: 50%; /* Ajusta el ancho para pantallas pequeñas */
+                height: auto; /* Mantiene proporción de la imagen */
+                
             }
 
             button {
-                margin-top: 0; /* Elimina márgenes extra en móvil */
+                margin: 0 5px; /* Espacio reducido en pantallas pequeñas */ 
+                padding: 10px;
             }
 
             p {
                 font-size: 0.9rem;
             }
-
-            .carousel img {
-                width: 100%; /* Ajusta el ancho para pantallas pequeñas */
-                height: auto; /* Mantiene proporción de la imagen */
-            }
         }
+        
 
         /* Botón modo oscuro */
         .dark-mode-toggle {
@@ -258,4 +257,14 @@
         // Función para alternar el modo oscuro
         function toggleDarkMode() {
             document.body.classList.toggle('dark-mode');
-            var darkModeButton = document.querySelector('.
+            var darkModeButton = document.querySelector('.dark-mode-toggle');
+            darkModeButton.classList.toggle('dark');
+            if (darkModeButton.innerText === "Modo Oscuro") {
+                darkModeButton.innerText = "Modo Claro";
+            } else {
+                darkModeButton.innerText = "Modo Oscuro";
+            }
+        }
+    </script>
+</body>
+</html>
