@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subir Imagen a Firebase</title>
+</head>
+<body>
+    <h2>Subir Imagen</h2>
+    <form id="uploadForm">
+        <input type="file" id="imageInput" accept="image/*" required />
+        <button type="submit">Aceptar</button>
+    </form>
+
+    <script type="module">
+        // Importar las funciones necesarias de Firebase
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
+        import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-storage.js";
+
+        // Configuración de Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyDSWukEbEDngjrQoXUoy5FzVHS-W64osdY",
+            authDomain: "delsur-30194.firebaseapp.com",
+            projectId: "delsur-30194",
+            storageBucket: "delsur-30194.appspot.com",
+            messagingSenderId: "384760703892",
+            appId: "1:384760703892:web:f1f7f59699714334ae3d81",
+            measurementId: "G-H90YGKSPL4"
+        };
+
+        // Inicializar Firebase
+        const app = initializeApp(firebaseConfig);
+        const storage = getStorage(app);
+
+        // Función para subir imagen a Firebase Storage
+        const uploadForm = document.getElementById('uploadForm');
+        uploadForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const fileInput = document.getElementById('imageInput');
+            const file = fileInput.files[0];
+
+            if (file) {
+                // Crear una referencia en Firebase Storage
+                const storageRef = ref(storage, 'imagenes/' + file.name);
+                
+                // Subir archivo
+                const uploadTask = uploadBytesResumable(storageRef, file);
+
+                uploadTask.on('state_changed', 
+                    (snapshot) => {
+                        // Progreso de la carga (opcional)
+                        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                        console.log('Progreso: ' + progress + '%');
+                    }, 
+                    (error) => {
+                        console.error('Error al subir la imagen:', error);
+                    }, 
+                    () => {
+                        // Obtener la URL de descarga una vez que se sube el archivo
+                        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                            console.log('Imagen disponible en:', downloadURL);
+                            alert('Imagen subida con éxito.');
+                        });
+                    }
+                );
+            } else {
+                alert('Por favor, selecciona una imagen.');
+            }
+        });
+    </script>
+</body>
+</html>
