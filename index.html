@@ -3,71 +3,263 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Subir Imagen a Firebase</title>
+    <title>Carrusel de Autos</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Estilos globales */
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        /* Contenedor principal */
+        .wrapper {
+            min-height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Logo */
+        #logo {
+            max-height: 150px;
+            object-fit: contain;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 1), 0 0 15px rgba(0, 0, 0, 1);
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        p {
+            text-align: center;
+            font-size: 1rem;
+            margin-bottom: 20px;
+        }
+
+        /* Carrusel */
+        .carousel-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin: 20px auto;
+            max-width: 500px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .carousel {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        /* Imágenes del carrusel con tamaño fijo */
+        .carousel img {
+            width: 400px; /* Ancho fijo */
+            height: 300px; /* Alto fijo */
+            object-fit: cover; /* Mantiene la calidad sin deformar la imagen */
+            border-radius: 10px;
+        }
+
+        button {
+            background-color: #333;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            margin: 0 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #555;
+        }
+
+        /* Modo oscuro */
+        .dark-mode {
+            background-color: #111;
+            color: #f4f4f4;
+        }
+
+        .dark-mode .carousel-container {
+            background-color: #333;
+            border: 1px solid #444;
+        }
+
+        .dark-mode button {
+            background-color: #222;
+            color: gold;
+        }
+
+        .dark-mode button:hover {
+            background-color: #444;
+        }
+
+        .dark-mode h2 {
+            color: gold;
+        }
+
+        .dark-mode #logo {
+            box-shadow: 0 4px 8px rgba(255, 215, 0, 0.2), 0 0 15px rgba(255, 215, 0, 0.2);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #333;
+            color: #fff;
+            width: 100%;
+            box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
+            margin-top: auto;
+        }
+
+        footer a {
+            text-decoration: none;
+            color: white;
+            margin: 0 10px;
+        }
+
+        footer a:hover {
+            color: gold;
+        }
+
+        /* Estilos para dispositivos móviles */
+        @media (max-width: 768px) {
+            .carousel {
+                flex-direction: column;
+            }
+
+            button {
+                margin-top: 10px;
+            }
+
+            p {
+                font-size: 0.9rem;
+            }
+
+            .carousel img {
+                width: 100%; /* Ajusta el ancho para pantallas pequeñas */
+                height: auto; /* Mantiene proporción de la imagen */
+            }
+        }
+
+        /* Botón modo oscuro */
+        .dark-mode-toggle {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background-color: #333;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .dark-mode-toggle.dark {
+            background-color: #222;
+            color: gold;
+        }
+
+    </style>
 </head>
 <body>
-    <h2>Subir Imagen</h2>
-    <form id="uploadForm">
-        <input type="file" id="imageInput" accept="image/*" required />
-        <button type="submit">Aceptar</button>
-    </form>
+    <div class="wrapper">
+        <!-- Botón de Modo Oscuro -->
+        <button class="dark-mode-toggle" onclick="toggleDarkMode()">Modo Oscuro</button>
 
-    <script type="module">
-        // Importar las funciones necesarias de Firebase
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
-        import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-storage.js";
+        <!-- Primer Carrusel con título y detalle -->
+        <div class="carousel-container">
+            <div class="carousel">
+                <button onclick="prevImage('carousel1')">Anterior</button>
+                <img id="imageCarousel1" src="WhatsApp Image 2024-09-17 at 20.03.41.jpeg" alt="Imagen 1">
+                <button onclick="nextImage('carousel1')">Siguiente</button>
+            </div>
+            <h2>Clio $4.700.000 ars</h2>
+            <p>Nafta. 3 puertas.</p>
+        </div>
 
-        // Configuración de Firebase
-        const firebaseConfig = {
-            apiKey: "AIzaSyDSWukEbEDngjrQoXUoy5FzVHS-W64osdY",
-            authDomain: "delsur-30194.firebaseapp.com",
-            projectId: "delsur-30194",
-            storageBucket: "delsur-30194.appspot.com",
-            messagingSenderId: "384760703892",
-            appId: "1:384760703892:web:f1f7f59699714334ae3d81",
-            measurementId: "G-H90YGKSPL4"
+        <!-- Segundo Carrusel con título y detalle -->
+        <div class="carousel-container">
+            <div class="carousel">
+                <button onclick="prevImage('carousel2')">Anterior</button>
+                <img id="imageCarousel2" src="bbb.jpeg" alt="Imagen 1">
+                <button onclick="nextImage('carousel2')">Siguiente</button>
+            </div>
+            <h2>Bugatti $2.700.000 usd</h2>
+            <p>Solo 2 asientos, si queres mas asientos anda al colectivo</p>
+        </div>
+    </div>
+
+    <!-- Footer con iconos de Instagram y WhatsApp -->
+    <footer>
+        &copy; 2024 Del Sur Motors. Todos los derechos reservados.
+        <div style="margin-top: 10px;">
+            <a href="https://www.instagram.com/nelagasser" target="_blank">
+                <i class="fab fa-instagram fa-2x"></i>
+            </a>
+            <a href="https://wa.me/3412101401" target="_blank">
+                <i class="fab fa-whatsapp fa-2x"></i>
+                <i> Federico</i>
+            </a>
+        </div>
+    </footer>
+
+    <script>
+        // Carruseles
+        var images = {
+            carousel1: ["WhatsApp Image 2024-09-17 at 20.03.41.jpeg", "cc.jpg"],
+            carousel2: ["bbb.jpeg", "intbb.jpg", "bb.jpg"]
         };
 
-        // Inicializar Firebase
-        const app = initializeApp(firebaseConfig);
-        const storage = getStorage(app);
+        var currentIndex = {
+            carousel1: 0,
+            carousel2: 0
+        };
 
-        // Función para subir imagen a Firebase Storage
-        const uploadForm = document.getElementById('uploadForm');
-        uploadForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            
-            const fileInput = document.getElementById('imageInput');
-            const file = fileInput.files[0];
-
-            if (file) {
-                // Crear una referencia en Firebase Storage
-                const storageRef = ref(storage, 'imagenes/' + file.name);
-                
-                // Subir archivo
-                const uploadTask = uploadBytesResumable(storageRef, file);
-
-                uploadTask.on('state_changed', 
-                    (snapshot) => {
-                        // Progreso de la carga (opcional)
-                        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                        console.log('Progreso: ' + progress + '%');
-                    }, 
-                    (error) => {
-                        console.error('Error al subir la imagen:', error);
-                    }, 
-                    () => {
-                        // Obtener la URL de descarga una vez que se sube el archivo
-                        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-                            console.log('Imagen disponible en:', downloadURL);
-                            alert('Imagen subida con éxito.');
-                        });
-                    }
-                );
-            } else {
-                alert('Por favor, selecciona una imagen.');
+        function nextImage(carousel) {
+            currentIndex[carousel]++;
+            if (currentIndex[carousel] >= images[carousel].length) {
+                currentIndex[carousel] = 0;
             }
-        });
+            document.getElementById('imageCarousel' + carousel.charAt(carousel.length - 1)).src = images[carousel][currentIndex[carousel]];
+        }
+
+        function prevImage(carousel) {
+            currentIndex[carousel]--;
+            if (currentIndex[carousel] < 0) {
+                currentIndex[carousel] = images[carousel].length - 1;
+            }
+            document.getElementById('imageCarousel' + carousel.charAt(carousel.length - 1)).src = images[carousel][currentIndex[carousel]];
+        }
+
+        // Función para alternar el modo oscuro
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            var darkModeButton = document.querySelector('.dark-mode-toggle');
+            darkModeButton.classList.toggle('dark');
+            if (darkModeButton.innerText === "Modo Oscuro") {
+                darkModeButton.innerText = "Modo Claro";
+            } else {
+                darkModeButton.innerText = "Modo Oscuro";
+            }
+        }
     </script>
 </body>
 </html>
