@@ -11,6 +11,7 @@
             height: 100%;
             margin: 0;
             padding: 0;
+            overflow-x: hidden; /* Eliminar espacio a la derecha */
         }
 
         body {
@@ -58,6 +59,7 @@
             border-radius: 10px;
             background-color: #fff;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%; /* Ocupa todo el ancho en móvil */
         }
 
         .carousel {
@@ -65,12 +67,14 @@
             justify-content: center;
             align-items: center;
             margin-bottom: 15px;
+            width: 100%; /* Ajustar el carrusel al 100% */
         }
 
         /* Imágenes del carrusel con tamaño fijo */
         .carousel img {
-            width: 400px; /* Ancho fijo */
-            height: 300px; /* Alto fijo */
+            width: 100%; /* Ajusta al 100% del contenedor */
+            max-width: 400px; /* No exceder el ancho máximo */
+            height: auto;
             object-fit: cover; /* Mantiene la calidad sin deformar la imagen */
             border-radius: 10px;
         }
@@ -142,11 +146,13 @@
         /* Estilos para dispositivos móviles */
         @media (max-width: 768px) {
             .carousel {
-                flex-direction: column;
+                flex-direction: row; /* Los botones se mantienen a los lados */
+                justify-content: space-between; /* Asegura que estén a los lados */
+                width: 100%; /* Ocupa todo el ancho */
             }
 
             button {
-                margin-top: 10px;
+                margin-top: 0; /* Elimina márgenes extra en móvil */
             }
 
             p {
@@ -203,7 +209,7 @@
                 <button onclick="nextImage('carousel2')">Siguiente</button>
             </div>
             <h2>Bugatti $2.700.000 usd</h2>
-            <p>Solo 2 asientos, si queres mas asientos anda al colectivo</p>
+            <p>2 asientos, si queres mas asientos anda al colectivo</p>
         </div>
     </div>
 
@@ -252,14 +258,4 @@
         // Función para alternar el modo oscuro
         function toggleDarkMode() {
             document.body.classList.toggle('dark-mode');
-            var darkModeButton = document.querySelector('.dark-mode-toggle');
-            darkModeButton.classList.toggle('dark');
-            if (darkModeButton.innerText === "Modo Oscuro") {
-                darkModeButton.innerText = "Modo Claro";
-            } else {
-                darkModeButton.innerText = "Modo Oscuro";
-            }
-        }
-    </script>
-</body>
-</html>
+            var darkModeButton = document.querySelector('.
