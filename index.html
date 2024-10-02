@@ -6,9 +6,7 @@
     <title>Firebase Data</title>
 </head>
 <body>
-    <h1 id="title"></h1>
-    <p id="detail"></p>
-    <div id="images"></div>
+    <div id="postsContainer"></div>
 
     <script type="module">
         // Import Firebase functions
@@ -31,27 +29,47 @@
         const app = initializeApp(firebaseConfig);
         const database = getDatabase(app);
 
-        // Function to fetch data from Firebase
-        function fetchData() {
+        // Function to fetch all posts data from Firebase
+        function fetchAllPosts() {
             const dbRef = ref(database);
-            get(child(dbRef, `posts/-O8BnpcsgcDKVyQd1T8L`)).then((snapshot) => {
+            get(child(dbRef, `posts`)).then((snapshot) => {
                 if (snapshot.exists()) {
-                    const data = snapshot.val();
-                    document.getElementById("title").textContent = data.title;
-                    document.getElementById("detail").textContent = data.detail;
+                    const postsContainer = document.getElementById("postsContainer");
+                    const posts = snapshot.val();
 
-                    const imagesContainer = document.getElementById("images");
-                    if (data.images) {
-                        // Iterar sobre las claves del objeto 'images'
-                        Object.keys(data.images).forEach((key) => {
-                            const imageUrl = data.images[key];
-                            const img = document.createElement("img");
-                            img.src = imageUrl;
-                            img.alt = "Image";
-                            img.style.width = "200px"; // Puedes ajustar el tamaño según sea necesario
-                            imagesContainer.appendChild(img);
-                        });
-                    }
+                    // Iterate over each post (subnodos)
+                    Object.keys(posts).forEach((postId) => {
+                        const postData = posts[postId];
+
+                        // Create HTML elements for each post
+                        const postDiv = document.createElement("div");
+                        postDiv.style.marginBottom = "20px";
+
+                        const titleElement = document.createElement("h2");
+                        titleElement.textContent = postData.title;
+                        postDiv.appendChild(titleElement);
+
+                        const detailElement = document.createElement("p");
+                        detailElement.textContent = postData.detail;
+                        postDiv.appendChild(detailElement);
+
+                        const imagesContainer = document.createElement("div");
+                        if (postData.images) {
+                            // Iterate over image keys (0, 1, etc.)
+                            Object.keys(postData.images).forEach((key) => {
+                                const imageUrl = postData.images[key];
+                                const img = document.createElement("img");
+                                img.src = imageUrl;
+                                img.alt = "Image";
+                                img.style.width = "200px"; // Adjust size as needed
+                                img.style.marginRight = "10px";
+                                imagesContainer.appendChild(img);
+                            });
+                        }
+
+                        postDiv.appendChild(imagesContainer);
+                        postsContainer.appendChild(postDiv);
+                    });
                 } else {
                     console.log("No data available");
                 }
@@ -60,8 +78,8 @@
             });
         }
 
-        // Call the fetchData function when the page loads
-        window.onload = fetchData;
+        // Call the fetchAllPosts function when the page loads
+        window.onload = fetchAllPosts;
     </script>
 </body>
 </html>
