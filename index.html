@@ -35,6 +35,7 @@
         function fetchData() {
             const dbRef = ref(database);
             get(child(dbRef, `posts/O8BnpcsgcDKVyQd1T8L`)).then((snapshot) => {
+                console.log(snapshot.val())
                 if (snapshot.exists()) {
                     const data = snapshot.val();
                     document.getElementById("title").textContent = data.title;
