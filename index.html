@@ -34,20 +34,21 @@
         // Function to fetch data from Firebase
         function fetchData() {
             const dbRef = ref(database);
-            get(child(dbRef, `posts/O8BnpcsgcDKVyQd1T8L`)).then((snapshot) => {
-                console.log(snapshot.val())
+            get(child(dbRef, `posts/-O8BnpcsgcDKVyQd1T8L`)).then((snapshot) => {
                 if (snapshot.exists()) {
                     const data = snapshot.val();
                     document.getElementById("title").textContent = data.title;
                     document.getElementById("detail").textContent = data.detail;
 
                     const imagesContainer = document.getElementById("images");
-                    if (data.images && Array.isArray(data.images)) {
-                        data.images.forEach((imageUrl) => {
+                    if (data.images) {
+                        // Iterar sobre las claves del objeto 'images'
+                        Object.keys(data.images).forEach((key) => {
+                            const imageUrl = data.images[key];
                             const img = document.createElement("img");
                             img.src = imageUrl;
                             img.alt = "Image";
-                            img.style.width = "200px"; // You can adjust the size as needed
+                            img.style.width = "200px"; // Puedes ajustar el tamaño según sea necesario
                             imagesContainer.appendChild(img);
                         });
                     }
