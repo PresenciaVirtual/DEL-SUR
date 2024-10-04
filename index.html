@@ -1,11 +1,94 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Firebase Data</title>
+    <title>Car Listings</title>
+    <style>
+        /* General styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 40px;
+            font-size: 2.5em;
+            color: #2c3e50;
+        }
+
+        #postsContainer {
+            max-width: 1200px;
+            width: 100%;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        /* Post container styles */
+        .post {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            transition: box-shadow 0.3s ease;
+        }
+
+        .post:hover {
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        h2 {
+            font-size: 1.5em;
+            margin: 0;
+            color: #34495e;
+        }
+
+        p {
+            font-size: 1em;
+            color: #7f8c8d;
+            margin-bottom: 15px;
+        }
+
+        .images {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-start;
+        }
+
+        .images img {
+            width: 100px;
+            height: auto;
+            border-radius: 5px;
+            object-fit: cover;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 2em;
+            }
+
+            h2 {
+                font-size: 1.25em;
+            }
+
+            .images img {
+                width: 80px;
+            }
+        }
+    </style>
 </head>
+
 <body>
+    <h1>Cars for Sale</h1>
     <div id="postsContainer"></div>
 
     <script type="module">
@@ -43,7 +126,7 @@
 
                         // Create HTML elements for each post
                         const postDiv = document.createElement("div");
-                        postDiv.style.marginBottom = "20px";
+                        postDiv.classList.add("post");
 
                         const titleElement = document.createElement("h2");
                         titleElement.textContent = postData.title;
@@ -54,15 +137,14 @@
                         postDiv.appendChild(detailElement);
 
                         const imagesContainer = document.createElement("div");
+                        imagesContainer.classList.add("images");
                         if (postData.images) {
                             // Iterate over image keys (0, 1, etc.)
                             Object.keys(postData.images).forEach((key) => {
                                 const imageUrl = postData.images[key];
                                 const img = document.createElement("img");
                                 img.src = imageUrl;
-                                img.alt = "Image";
-                                img.style.width = "200px"; // Adjust size as needed
-                                img.style.marginRight = "10px";
+                                img.alt = "Car Image";
                                 imagesContainer.appendChild(img);
                             });
                         }
@@ -82,4 +164,5 @@
         window.onload = fetchAllPosts;
     </script>
 </body>
+
 </html>
