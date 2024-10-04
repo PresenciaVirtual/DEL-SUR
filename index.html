@@ -70,6 +70,7 @@
             height: 100%;
             object-fit: cover;
             display: none;
+            cursor: pointer;
         }
 
         .carousel img.active {
@@ -96,6 +97,36 @@
             right: 10px;
         }
 
+        /* Fullscreen modal styles */
+        #fullscreenModal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+        }
+
+        #fullscreenModal img {
+            position: absolute;
+            max-width: 90%;
+            max-height: 90%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        #fullscreenModal .close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 30px;
+            color: white;
+            cursor: pointer;
+        }
+
         /* Responsive adjustments */
         @media (max-width: 600px) {
             h1 {
@@ -116,6 +147,12 @@
 <body>
     <h1>Cars for Sale</h1>
     <div id="postsContainer"></div>
+
+    <!-- Fullscreen Modal -->
+    <div id="fullscreenModal">
+        <span class="close" onclick="closeFullscreen()">×</span>
+        <img id="fullscreenImage" src="" alt="Full Image">
+    </div>
 
     <script type="module">
         // Import Firebase functions
@@ -141,7 +178,7 @@
         // Function to fetch all posts data from Firebase
         function fetchAllPosts() {
             const dbRef = ref(database);
-            get(child(dbRef, `posts`)).then((snapshot) => {
+            get(child(dbRef, 'posts')).then((snapshot) => {
                 if (snapshot.exists()) {
                     const postsContainer = document.getElementById("postsContainer");
                     const posts = snapshot.val();
@@ -195,6 +232,12 @@
                                 }
                                 img.setAttribute("data-post-id", postId);
                                 img.setAttribute("data-index", index);
+                                
+                                // Add click event to open fullscreen
+                                img.onclick = function () {
+                                    openFullscreen(imageUrl);
+                                };
+
                                 carouselContainer.appendChild(img);
                             });
                         }
@@ -234,6 +277,20 @@
 
             // Show the new image
             images[newIndex].classList.add("active");
+        }
+
+        // Function to open an image in fullscreen
+        function openFullscreen(imageUrl) {
+            const modal = document.getElementById("fullscreenModal");
+            const fullscreenImage = document.getElementById("fullscreenImage");
+            fullscreenImage.src = imageUrl;
+            modal.style.display = "block";
+        }
+
+        // Function to close fullscreen
+        function closeFullscreen() {
+            const modal = document.getElementById("fullscreenModal");
+            modal.style.display = "none";
         }
 
         // Call the fetchAllPosts function when the page loads
