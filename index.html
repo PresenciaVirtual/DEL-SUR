@@ -12,24 +12,23 @@
             background-color: #f4f4f9;
             color: #333;
             margin: 0;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
+            padding: 10px;
         }
 
         h1 {
             text-align: center;
-            margin-bottom: 40px;
-            font-size: 2.5em;
+            margin-bottom: 20px;
+            font-size: 2em;
             color: #2c3e50;
         }
 
         #postsContainer {
-            max-width: 1200px;
-            width: 100%;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            display: flex;
+            flex-direction: column;
             gap: 20px;
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
         }
 
         /* Post container styles */
@@ -37,7 +36,7 @@
             background-color: white;
             border-radius: 10px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            padding: 20px;
+            padding: 15px;
             transition: box-shadow 0.3s ease;
         }
 
@@ -46,7 +45,7 @@
         }
 
         h2 {
-            font-size: 1.5em;
+            font-size: 1.2em;
             margin: 0;
             color: #34495e;
         }
@@ -59,8 +58,8 @@
 
         .images {
             display: flex;
+            overflow-x: auto;
             gap: 10px;
-            justify-content: flex-start;
         }
 
         .images img {
@@ -68,16 +67,21 @@
             height: auto;
             border-radius: 5px;
             object-fit: cover;
+            flex-shrink: 0;
         }
 
         /* Responsive adjustments */
         @media (max-width: 600px) {
             h1 {
-                font-size: 2em;
+                font-size: 1.8em;
             }
 
             h2 {
-                font-size: 1.25em;
+                font-size: 1.1em;
+            }
+
+            .post {
+                padding: 10px;
             }
 
             .images img {
