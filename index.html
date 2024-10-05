@@ -141,7 +141,7 @@
         // Function to fetch all posts data from Firebase
         function fetchAllPosts() {
             const dbRef = ref(database);
-            get(child(dbRef, posts)).then((snapshot) => {
+            get(child(dbRef, "posts")).then((snapshot) => {
                 if (snapshot.exists()) {
                     const postsContainer = document.getElementById("postsContainer");
                     const posts = snapshot.val();
@@ -212,7 +212,7 @@
 
         // Function to change the image in the carousel
         function changeImage(postId, direction) {
-            const images = document.querySelectorAll(img[data-post-id="${postId}"]);
+            const images = document.querySelectorAll(`img[data-post-id="${postId}"]`);
             let currentIndex = 0;
 
             // Find the current active image
