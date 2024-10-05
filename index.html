@@ -70,7 +70,6 @@
             height: 100%;
             object-fit: cover;
             display: none;
-            cursor: pointer;
         }
 
         .carousel img.active {
@@ -102,56 +101,27 @@
         .modal {
             display: none;
             position: fixed;
-            z-index: 100;
+            z-index: 1000;
             left: 0;
             top: 0;
             width: 100%;
             height: 100%;
-            overflow: auto;
-            background-color: rgba(0, 0, 0, 0.8);
+            background-color: rgba(0, 0, 0, 0.9);
         }
 
-        .modal-content {
-            position: relative;
+        .modal img {
             margin: auto;
-            padding: 0;
+            display: block;
             width: 90%;
             max-width: 700px;
         }
 
-        .modal img {
-            width: 100%;
-            height: auto;
-        }
-
-        .modal .prev,
-        .modal .next {
+        .modal .close {
             position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            background-color: rgba(0, 0, 0, 0.5);
+            top: 20px;
+            right: 30px;
             color: white;
-            border: none;
-            padding: 10px;
-            cursor: pointer;
-            z-index: 10;
-        }
-
-        .modal .prev {
-            left: 0;
-        }
-
-        .modal .next {
-            right: 0;
-        }
-
-        .close {
-            position: absolute;
-            top: 10px;
-            right: 20px;
-            color: white;
-            font-size: 35px;
-            font-weight: bold;
+            font-size: 30px;
             cursor: pointer;
         }
 
@@ -176,14 +146,10 @@
     <h1>Cars for Sale</h1>
     <div id="postsContainer"></div>
 
-    <!-- Modal -->
+    <!-- Modal for displaying images in full size -->
     <div id="imageModal" class="modal">
         <span class="close">&times;</span>
-        <div class="modal-content">
-            <img id="modalImage">
-            <button class="prev">❮</button>
-            <button class="next">❯</button>
-        </div>
+        <img class="modal-content" id="modalImage">
     </div>
 
     <script type="module">
@@ -193,14 +159,14 @@
 
         // Your Firebase configuration
         const firebaseConfig = {
-            apiKey: "API_KEY",
-            authDomain: "DOMAIN",
-            databaseURL: "DATABASE_URL",
-            projectId: "PROJECT_ID",
-            storageBucket: "STORAGE_BUCKET",
-            messagingSenderId: "SENDER_ID",
-            appId: "APP_ID",
-            measurementId: "MEASUREMENT_ID"
+            apiKey: "AIzaSyDSWukEbEDngjrQoXUoy5FzVHS-W64osdY",
+            authDomain: "delsur-30194.firebaseapp.com",
+            databaseURL: "https://delsur-30194-default-rtdb.firebaseio.com",
+            projectId: "delsur-30194",
+            storageBucket: "delsur-30194.appspot.com",
+            messagingSenderId: "384760703892",
+            appId: "1:384760703892:web:f1f7f59699714334ae3d81",
+            measurementId: "G-H90YGKSPL4"
         };
 
         // Initialize Firebase
@@ -215,7 +181,7 @@
                     const postsContainer = document.getElementById("postsContainer");
                     const posts = snapshot.val();
 
-                    // Iterate over each post (subnodos)
+                    // Iterate over each post (subnodes)
                     Object.keys(posts).forEach((postId) => {
                         const postData = posts[postId];
 
@@ -265,7 +231,7 @@
                                 img.setAttribute("data-post-id", postId);
                                 img.setAttribute("data-index", index);
                                 img.onclick = function () {
-                                    openModal(postId, index);
+                                    openModal(imageUrl);
                                 };
                                 carouselContainer.appendChild(img);
                             });
@@ -308,47 +274,23 @@
             images[newIndex].classList.add("active");
         }
 
-        // Modal functionality
-        const modal = document.getElementById("imageModal");
-        const modalImage = document.getElementById("modalImage");
-        let modalCurrentIndex = 0;
-        let modalPostId = null;
-
-        function openModal(postId, index) {
-            const images = document.querySelectorAll(`img[data-post-id="${postId}"]`);
-            modalCurrentIndex = index;
-            modalPostId = postId;
-            modalImage.src = images[index].src;
+        // Function to open the modal with a larger image
+        function openModal(imageUrl) {
+            const modal = document.getElementById("imageModal");
+            const modalImg = document.getElementById("modalImage");
             modal.style.display = "block";
+            modalImg.src = imageUrl;
         }
 
-        document.querySelector(".close").onclick = function () {
+        // Function to close the modal
+        const modal = document.getElementById("imageModal");
+        const closeModal = document.getElementsByClassName("close")[0];
+        closeModal.onclick = function () {
             modal.style.display = "none";
         };
 
-        // Function to change the image inside the modal
-        function changeModalImage(direction) {
-            const images = document.querySelectorAll(`img[data-post-id="${modalPostId}"]`);
-            modalCurrentIndex += direction;
-            if (modalCurrentIndex >= images.length) {
-                modalCurrentIndex = 0;
-            }
-            if (modalCurrentIndex < 0) {
-                modalCurrentIndex = images.length - 1;
-            }
-            modalImage.src = images[modalCurrentIndex].src;
-        }
-
-        document.querySelector(".modal .prev").onclick = function () {
-            changeModalImage(-1);
-        };
-
-        document.querySelector(".modal .next").onclick = function () {
-            changeModalImage(1);
-        };
-
-        // Fetch posts on page load
-        fetchAllPosts();
+        // Call the fetchAllPosts function when the page loads
+        window.onload = fetchAllPosts;
     </script>
 </body>
 
