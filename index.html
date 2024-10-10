@@ -125,14 +125,15 @@
             right: 30px;
             background-color: white;
             color: black;
-            font-size: 30px;
+            font-size: 25px;
             border: 2px solid black;
             border-radius: 50%;
-            width: 40px;
-            height: 40px;
+            width: 30px;
+            height: 30px;
             text-align: center;
-            line-height: 35px;
+            line-height: 25px;
             cursor: pointer;
+            z-index: 2000; /* Ensure the close button is always on top */
         }
 
         .modal .close:hover {
@@ -151,7 +152,7 @@
             padding: 10px;
             font-size: 30px;
             cursor: pointer;
-            z-index: 10;
+            z-index: 1000;
         }
 
         .modal .prev {
