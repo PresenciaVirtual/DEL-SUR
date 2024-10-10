@@ -140,6 +140,28 @@
             color: white;
         }
 
+        .modal .prev,
+        .modal .next {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(255, 255, 255, 0.5);
+            color: black;
+            border: none;
+            padding: 10px;
+            font-size: 30px;
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        .modal .prev {
+            left: 10px;
+        }
+
+        .modal .next {
+            right: 10px;
+        }
+
         /* Responsive adjustments */
         @media (max-width: 600px) {
             h1 {
@@ -161,10 +183,12 @@
     <h1>Cars for Sale</h1>
     <div id="postsContainer"></div>
 
-    <!-- Modal for displaying images in full size -->
+    <!-- Modal for displaying images in full size with carousel -->
     <div id="imageModal" class="modal">
         <span class="close">&times;</span>
+        <button class="prev">&#10094;</button>
         <img class="modal-content" id="modalImage">
+        <button class="next">&#10095;</button>
     </div>
 
     <script type="module">
@@ -187,6 +211,9 @@
         // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const database = getDatabase(app);
+
+        let modalImages = [];
+        let currentImageIndex = 0;
 
         // Function to fetch all posts data from Firebase
         function fetchAllPosts() {
@@ -246,7 +273,7 @@
                                 img.setAttribute("data-post-id", postId);
                                 img.setAttribute("data-index", index);
                                 img.onclick = function () {
-                                    openModal(imageUrl);
+                                    openModal(postData.images, index);
                                 };
                                 carouselContainer.appendChild(img);
                             });
@@ -289,12 +316,20 @@
             images[newIndex].classList.add("active");
         }
 
-        // Function to open the modal with a larger image
-        function openModal(imageUrl) {
+        // Function to open the modal with a larger image and start the modal carousel
+        function openModal(images, index) {
+            modalImages = Object.values(images);
+            currentImageIndex = index;
+            updateModalImage();
+
             const modal = document.getElementById("imageModal");
-            const modalImg = document.getElementById("modalImage");
             modal.style.display = "block";
-            modalImg.src = imageUrl;
+        }
+
+        // Function to update the modal image based on the currentImageIndex
+        function updateModalImage() {
+            const modalImg = document.getElementById("modalImage");
+            modalImg.src = modalImages[currentImageIndex];
         }
 
         // Function to close the modal
@@ -302,6 +337,20 @@
         const closeModal = document.getElementsByClassName("close")[0];
         closeModal.onclick = function () {
             modal.style.display = "none";
+        };
+
+        // Function to change the image in the modal carousel
+        const prevModal = document.getElementsByClassName("prev")[0];
+        const nextModal = document.getElementsByClassName("next")[0];
+
+        prevModal.onclick = function () {
+            currentImageIndex = (currentImageIndex - 1 + modalImages.length) % modalImages.length;
+            updateModalImage();
+        };
+
+        nextModal.onclick = function () {
+            currentImageIndex = (currentImageIndex + 1) % modalImages.length;
+            updateModalImage();
         };
 
         // Call the fetchAllPosts function when the page loads
