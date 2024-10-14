@@ -18,9 +18,23 @@
 
         h1 {
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
             font-size: 2em;
             color: #2c3e50;
+        }
+
+        /* Logo styles */
+        #logoContainer {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px; /* Adjust spacing between logo and content */
+        }
+
+        #logoContainer img {
+            width: 150px;
+            height: 150px;
+            border-radius: 10px;
+            object-fit: cover;
         }
 
         #postsContainer {
@@ -209,6 +223,11 @@
                 font-size: 1.8em;
             }
 
+            #logoContainer img {
+                width: 120px;
+                height: 120px;
+            }
+
             h2 {
                 font-size: 1.1em;
             }
@@ -222,7 +241,14 @@
 
 <body>
     <h1>Cars for Sale</h1>
+
+    <!-- Logo Container -->
+    <div id="logoContainer">
+        <img src="logo.png" alt="Logo">
+    </div>
+
     <button class="dark-mode-btn" id="darkModeToggle">🌙</button>
+
     <div id="postsContainer"></div>
 
     <!-- Modal for displaying images in full size with carousel -->
@@ -285,24 +311,8 @@
                         const carouselContainer = document.createElement("div");
                         carouselContainer.classList.add("carousel");
 
-                        const prevButton = document.createElement("button");
-                        prevButton.classList.add("prev");
-                        prevButton.textContent = "❮";
-                        prevButton.onclick = function () {
-                            changeImage(postId, -1);
-                        };
-                        carouselContainer.appendChild(prevButton);
-
-                        const nextButton = document.createElement("button");
-                        nextButton.classList.add("next");
-                        nextButton.textContent = "❯";
-                        nextButton.onclick = function () {
-                            changeImage(postId, 1);
-                        };
-                        carouselContainer.appendChild(nextButton);
-
+                        // Check if postData has images
                         if (postData.images) {
-                            // Iterate over image keys (0, 1, etc.)
                             Object.keys(postData.images).forEach((key, index) => {
                                 const imageUrl = postData.images[key];
                                 const img = document.createElement("img");
